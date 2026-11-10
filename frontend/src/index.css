@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design tokens ──────────────────────────────────────────────────────────
+   Identity: a control-room / telemetry instrument. Deep ink-blue surfaces,
+   periwinkle-indigo primary (the "signal"), with semantic status colors for the
+   pipeline (run / ok / wait / err). Both themes are hand-tuned, not inverted.  */
+
+@layer base {
+  :root {
+    /* Light theme — cool paper, ink text. */
+    --background: 220 33% 98%;
+    --foreground: 222 34% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 34% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 34% 12%;
+
+    --primary: 232 74% 62%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 22% 94%;
+    --secondary-foreground: 222 30% 20%;
+
+    --muted: 220 20% 94%;
+    --muted-foreground: 220 12% 44%;
+
+    --accent: 232 60% 95%;
+    --accent-foreground: 232 60% 34%;
+
+    --border: 220 18% 88%;
+    --input: 220 18% 86%;
+    --ring: 232 74% 62%;
+
+    --signal-run: 202 90% 55%;
+    --signal-ok: 152 62% 44%;
+    --signal-wait: 36 92% 52%;
+    --signal-err: 4 84% 62%;
+
+    --radius: 0.7rem;
+  }
+
+  .dark {
+    /* Dark theme — deep ink-blue, not pure black. */
+    --background: 222 34% 7%;
+    --foreground: 214 32% 92%;
+
+    --card: 222 30% 10%;
+    --card-foreground: 214 32% 92%;
+
+    --popover: 222 32% 9%;
+    --popover-foreground: 214 32% 92%;
+
+    --primary: 232 90% 74%;
+    --primary-foreground: 224 42% 10%;
+
+    --secondary: 221 24% 16%;
+    --secondary-foreground: 214 28% 88%;
+
+    --muted: 221 22% 15%;
+    --muted-foreground: 218 14% 60%;
+
+    --accent: 232 40% 20%;
+    --accent-foreground: 232 90% 84%;
+
+    --border: 220 20% 18%;
+    --input: 220 20% 20%;
+    --ring: 232 90% 74%;
+
+    --signal-run: 199 92% 62%;
+    --signal-ok: 152 64% 52%;
+    --signal-wait: 38 94% 58%;
+    --signal-err: 4 90% 68%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "cv11", "ss01";
+  }
+  ::selection {
+    @apply bg-primary/25;
+  }
+
+  /* Scrollbars — slim, themed. */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+    border: 2px solid hsl(var(--background));
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/40;
+  }
+}
+
+@layer components {
+  /* Eyebrow / kicker label — mono, tracked out. A recurring structural device. */
+  .eyebrow {
+    @apply font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground;
+  }
+
+  /* Ambient grid backdrop for the empty/hero canvas. */
+  .grid-backdrop {
+    background-image:
+      linear-gradient(to right, hsl(var(--border) / 0.5) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border) / 0.5) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 35%, black 30%, transparent 75%);
+  }
+
+  .skeleton {
+    @apply relative overflow-hidden rounded-md bg-muted;
+  }
+  .skeleton::after {
+    content: "";
+    @apply absolute inset-0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--foreground) / 0.06),
+      transparent
+    );
+    animation: shimmer 1.5s infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

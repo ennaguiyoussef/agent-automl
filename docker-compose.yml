@@ -1,0 +1,48 @@
+# Agentic AutoML — full stack (FastAPI + LangGraph backend, React frontend).
+#
+#   docker compose up --build
+#
+# Then open http://localhost:5173. The frontend (nginx) proxies /api to the
+# backend, so both run same-origin. Provide GROQ_API_KEY in .env to enable the
+# LLM reasoning path; without it the backend runs in deterministic heuristic
+# mode (no fabricated output).
+
+services:
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # Keep runtime storage on mounted volumes, not the container layer.
+      DATA_DIR: /app/data
+      ARTIFACTS_DIR: /app/artifacts
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    volumes:
+      - backend-data:/app/data
+      - backend-artifacts:/app/artifacts
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0) if urllib.request.urlopen('http://localhost:8000/api/health').status==200 else sys.exit(1)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # Empty → bundle uses relative /api, which nginx proxies to backend.
+        VITE_API_BASE_URL: ""
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "5173:80"
+
+volumes:
+  backend-data:
+  backend-artifacts:

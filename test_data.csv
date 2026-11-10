@@ -1,0 +1,13 @@
+customer_id,age,income,contract_type,churn
+1,25,50000,monthly,0
+2,35,60000,yearly,1
+3,45,75000,monthly,0
+4,30,55000,yearly,1
+5,50,90000,monthly,0
+6,40,65000,yearly,0
+7,28,52000,monthly,1
+8,55,95000,yearly,0
+9,33,58000,monthly,1
+10,48,82000,yearly,0
+11,22,45000,monthly,1
+12,38,62000,yearly,0

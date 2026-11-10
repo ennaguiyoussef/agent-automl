@@ -1,0 +1,26 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+.env
+__pycache__/
+*.pyc
+
+# Backend runtime storage (uploaded datasets, trained models, reports)
+backend/data/
+backend/artifacts/
+backend/sample_data/
+
+# Node / frontend
+node_modules/
+
+# Pytest / tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
